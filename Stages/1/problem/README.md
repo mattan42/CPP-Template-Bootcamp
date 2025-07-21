@@ -18,6 +18,17 @@ As stated earlier, we'll begin by using the power of templates to write a generi
 - A *type template parameter* which will hold the type of the members it will be able to store.
 - A *constant template parameter* of an integral type, which will hold the number of members it will be able to store.
 
+3. Create the `CONSTANT_BUFFER_SIZE` parameter the tests use. This parameter should contain the integral value `10`.
+
+> [!WARNING]
+> Do **not** use the pre-processor to declare this parameter.
+
+> [!NOTE]
+> As a general note, we should always prefer using tepmaltes as opposed to macros (the pre-processor). On on that in the "appendix" section.
+
 ## Extra Questions
 
 1. Why is it called *function template* and not "template function"? How does it explain the behavior of the compiler?
+
+> [!NOTE]
+> Try reading [this page (from cppreference com)](https://en.cppreference.com/w/cpp/language/class_template.html#:~:text=Class%20template%20instantiation)

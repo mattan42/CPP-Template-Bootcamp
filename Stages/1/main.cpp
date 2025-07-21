@@ -64,3 +64,15 @@ TEST(buffer, uint8)
     EXPECT_EQ(bool_buffer.data[0], 0);
     EXPECT_EQ(bool_buffer.data[1], 1);
 }
+
+// NOTE: Make sure to define CONSTANT_BUFFER_SIZE to contain the value "10" without the pre-processor.
+// (`#define CONSTANT_BUFFER_SIZE 10` is not allowed!)
+TEST(buffer, constant_sized_integral_buffer)
+{
+#ifdef CONSTANT_BUFFER_SIZE
+#error "Please don't use macros to define CONSTANT_BUFFER_SIZE! use C++ features!"
+#endif
+
+    Buffer<uint32_t, CONSTANT_BUFFER_SIZE> int_buffer;
+    EXPECT_EQ(sizeof(int_buffer.data), 10 * sizeof(uint32_t))
+}
