@@ -10,4 +10,13 @@ T max(T v1, T v2)
         return v2;
 }
 
+template<typename T, int MemberCount>
+class Buffer
+{
+public:
+    T data[MemberCount];
+};
+
+constexpr int CONSTANT_BUFFER_SIZE = 10;
+
 #endif

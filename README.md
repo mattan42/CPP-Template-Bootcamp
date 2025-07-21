@@ -6,7 +6,7 @@ As a C++ developer, templates are an extremely powerful asset in your toolbox. T
 
 ## How to go Through the Bootcamp
 
-> [!info]
+> [!INFO]
 > The bootcamp can be done completely alone.
 
 The bootcamp is separated to stages. Each stage contains a `problem` directory and a `solution` directory.

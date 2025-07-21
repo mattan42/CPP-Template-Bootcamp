@@ -74,5 +74,5 @@ TEST(buffer, constant_sized_integral_buffer)
 #endif
 
     Buffer<uint32_t, CONSTANT_BUFFER_SIZE> int_buffer;
-    EXPECT_EQ(sizeof(int_buffer.data), 10 * sizeof(uint32_t))
+    EXPECT_EQ(sizeof(int_buffer.data), 10 * sizeof(uint32_t));
 }
