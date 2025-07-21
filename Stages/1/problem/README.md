@@ -10,4 +10,14 @@ This is true, and while it should be the first thing that we learn, it covers on
 
 ## Objective
 
+As stated earlier, we'll begin by using the power of templates to write a generic code for multiple data types.
 
+1. Create a `max` *function template* that accepts a *type tempalte parameter*.
+
+2. Create a `Buffer` *class template* that accepts two *template parameter*s:
+- A *type template parameter* which will hold the type of the members it will be able to store.
+- A *constant template parameter* of an integral type, which will hold the number of members it will be able to store.
+
+## Extra Questions
+
+1. Why is it called *function template* and not "template function"? How does it explain the behavior of the compiler?
