@@ -29,15 +29,21 @@ def stage_problem_page_run(stage_number: int):
     solution_attempt_hpp_file = (
         stage_directory_path / "Problem" / "solution.hpp"
     ).read_text()
+
     submitted_code = st_ace(
         value=solution_attempt_hpp_file,
         theme="twilight",
         language="c_cpp",
-        key=f"{str(stage_number)}_code_editor",
+        key=f"stage_problem_page_run_{str(stage_number)}_code_editor",
     )
+
     (stage_directory_path / "Problem" / "solution.hpp").write_text(submitted_code)
 
-    compile_and_run_button = st.button("Compile and Run", key=f"{str(stage_number)}_compile_and_run_button")
+    compile_and_run_button = st.button(
+        "Compile and Run",
+        key=f"stage_problem_page_run_{str(stage_number)}_compile_and_run_button",
+    )
+
     console_output_widget = st.empty()
 
     if compile_and_run_button:
@@ -63,9 +69,20 @@ def stage_problem_page_run(stage_number: int):
 
 # Pages
 main_page = st.Page(main_page_run, title="Main Page", icon="ℹ️")
-stage_1_problem_page = st.Page(lambda: stage_problem_page_run(1), title="Stage 1 Problem", icon="🤔")
+stage_1_problem_page = st.Page(
+    lambda: stage_problem_page_run(1),
+    url_path="stage_1_problem",
+    title="Stage 1 Problem",
+    icon="🤔",
+)
+stage_2_problem_page = st.Page(
+    lambda: stage_problem_page_run(2),
+    url_path="stage_2_problem",
+    title="Stage 2 Problem",
+    icon="🤔",
+)
 
 # App
-pg = st.navigation([main_page, stage_1_problem_page])
+pg = st.navigation([main_page, stage_1_problem_page, stage_2_problem_page])
 st.set_page_config(page_title="C++ Template Bootcamp", page_icon="🧑‍💻", layout="wide")
 pg.run()
