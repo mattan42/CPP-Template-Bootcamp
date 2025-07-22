@@ -43,7 +43,8 @@ For that reason, we have the `constexpr` specifier. From cppreference:
 
 For us to use an *integral type constant tempalte parameter*, the value has to be *constant* and known in compile time - so this keyword specifier is necessary in this case.
 
-However, keep in mind that the `constexpr` can be useful in plenty of other use-cases we'll see in later stages.
+> [!NOTE]
+> However, keep in mind that the `constexpr` can be useful in plenty of other use-cases we'll see in later stages.
 
 ## Extra Questions
 
