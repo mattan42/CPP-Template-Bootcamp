@@ -4,6 +4,10 @@
 
 #include "solution.hpp"
 
+/**
+ * Max function template tests
+ */
+
 TEST(max, uint8)
 {
     uint8_t v1 = 1;
@@ -16,24 +20,24 @@ TEST(max, uint32)
 {
     uint32_t v1 = 1;
     uint32_t v2 = 2;
-    EXPECT_EQ(max(v1, v2), v2); 
-    EXPECT_EQ(max<uint32_t>(v1, v2), v2); 
+    EXPECT_EQ(max(v1, v2), v2);
+    EXPECT_EQ(max<uint32_t>(v1, v2), v2);
 }
 
 TEST(max, uint64)
 {
     uint64_t v1 = 1;
     uint64_t v2 = 2;
-    EXPECT_EQ(max(v1, v2), v2); 
-    EXPECT_EQ(max<uint64_t>(v1, v2), v2); 
+    EXPECT_EQ(max(v1, v2), v2);
+    EXPECT_EQ(max<uint64_t>(v1, v2), v2);
 }
 
 TEST(max, char)
 {
     char v1 = 'a';
     char v2 = 'b';
-    EXPECT_EQ(max(v1, v2), v2); 
-    EXPECT_EQ(max<char>(v1, v2), v2); 
+    EXPECT_EQ(max(v1, v2), v2);
+    EXPECT_EQ(max<char>(v1, v2), v2);
 }
 
 // NOTE: This is weird! But works??
@@ -41,9 +45,13 @@ TEST(max, bool)
 {
     bool v1 = true;
     bool v2 = false;
-    EXPECT_EQ(max(v1, v2), v1); 
-    EXPECT_EQ(max<bool>(v1, v2), v1);  
+    EXPECT_EQ(max(v1, v2), v1);
+    EXPECT_EQ(max<bool>(v1, v2), v1);
 }
+
+/**
+ * Buffer class template tests
+ */
 
 TEST(buffer, bool)
 {
