@@ -12,7 +12,6 @@ def main_page_run():
     st.markdown((REPO_ROOT_PATH / "README.md").read_text(), unsafe_allow_html=True)
 
 
-# Stage 1 Page
 def stage_problem_page_run(stage_number: int):
     stage_directory_path = REPO_ROOT_PATH / "Stages" / str(stage_number)
 
@@ -66,21 +65,19 @@ def stage_problem_page_run(stage_number: int):
                 "".join(console_output), line_numbers=True, language=None
             )
 
+def streamlit_problem_page(stage_number: int) -> st.Page:
+    return st.Page(
+        lambda: stage_problem_page_run(stage_number),
+        url_path=f"stage_{stage_number}_problem",
+        title=f"Stage {stage_number} Problem",
+        icon="🤔",
+    )
+
 
 # Pages
 main_page = st.Page(main_page_run, title="Main Page", icon="ℹ️")
-stage_1_problem_page = st.Page(
-    lambda: stage_problem_page_run(1),
-    url_path="stage_1_problem",
-    title="Stage 1 Problem",
-    icon="🤔",
-)
-stage_2_problem_page = st.Page(
-    lambda: stage_problem_page_run(2),
-    url_path="stage_2_problem",
-    title="Stage 2 Problem",
-    icon="🤔",
-)
+stage_1_problem_page = streamlit_problem_page(stage_number=1)
+stage_2_problem_page = streamlit_problem_page(stage_number=2)
 
 # App
 pg = st.navigation([main_page, stage_1_problem_page, stage_2_problem_page])
