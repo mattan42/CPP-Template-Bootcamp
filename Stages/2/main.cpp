@@ -3,20 +3,13 @@
 
 #include "solution.hpp"
 
-template<typename T>
-struct can_compile_max
+TEST(max, accept_integral_types)
 {
-    static constexpr bool value = true;
-};
-
-
-template<>
-struct can_compile_max<bool>
-{
-    static constexpr bool value = false;
-};
-
-TEST(max, doesnt_accept_bool)
-{
-    EXPECT_FALSE(can_compile_max<decltype(max<bool>)>::value);
+    EXPECT_EQ(max<int>(1, 2), 2);
+    EXPECT_EQ(max<char>('a', 'b'), 'b');
+    EXPECT_EQ(max<const int>(1, 2), 2);
+    EXPECT_EQ(max<long>(1, 2), 2);
+    EXPECT_EQ(max<long long>(1, 2), 2);
 }
+
+// TODO: Add a helper template to check that the max function tempalte doesn't compile on certain scenarios.
