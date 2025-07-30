@@ -111,3 +111,14 @@ static_assert(std::is_same<bool, int>::value, "The two types are not the same ty
 ```
 
 In this case, `::value == false`, since bool and int are not the same type. This will cause a compilation error and display the message - *"The two types are not the same type"*.
+
+## What did we Learn?
+
+- *duck typing* in general and in the context of c++ template programming.
+- The `static_assert` directive
+    - How to use it with the `type_traits` library
+    - How to alert the user on compilation failure
+- The `type_traits` library's type queries
+    - `std::is_same` - checks if two types are the same
+    - `std::is_integral` - checks if a type is integral
+- How to use the the type checks from `type_traits` library with `static_asserts` to fine-tune our type checks.
