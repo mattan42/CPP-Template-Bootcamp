@@ -13,3 +13,7 @@ This is what we'll do in this stage!
 3. The previous type is good if we want to enforce the received type to specifically be `Adult`, `Child` or `Baby`, but what if we want to be able to receive a `HumanLike`?
     - Create a `is_human_like` type trait that accepts a *type template parameter* and checks if the received type has a public member `int age` **and** a public method `void think()` (if the type has just one or none - then it's not "human like").
 4. Create a *class template* 
+
+> [!NOTE]
+> In this stage (same as the previous), you are **not** allowed to use c++20 features (concepts, constraints, `requires`).
+> As a general broader note, there are many ways to solve the same problem, in c++ and maybe in life in general. In this bootcamp, try to solve the problem using the reading material, as the stages are meant to teach you specific knowledge in a specific order.
