@@ -8,11 +8,10 @@ This is what we'll do in this stage!
 
 ## Objective
 
-1. Read about *template specialization*.
+1. Read about [*explicit (full) template specialization*](https://en.cppreference.com/w/cpp/language/template_specialization.html).
 2. Create a `is_human` type trait that accepts a *type template parameter* and checks if the received *type template parameter* is an `Adult` or `Child` or `Baby` or not.
-3. The previous type is good if we want to enforce the received type to specifically be `Adult`, `Child` or `Baby`, but what if we want to be able to receive a `HumanLike`?
-    - Create a `is_human_like` type trait that accepts a *type template parameter* and checks if the received type has a public member `int age` **and** a public method `void think()` (if the type has just one or none - then it's not "human like").
-4. Create a *class template* 
+4. Remember our `Buffer` *class template* from the first stage? Create a `is_buffer` type trait that checks if a given type is a `Buffer`... type??? (is `Buffer` even a type? how can we check if something is created from the `Buffer` *class template*?)
+    - Read about [*partial template specializations*](https://en.cppreference.com/w/cpp/language/partial_specialization.html), it might help you!
 
 > [!NOTE]
 > In this stage (same as the previous), you are **not** allowed to use c++20 features (concepts, constraints, `requires`).
