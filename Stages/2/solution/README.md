@@ -20,7 +20,7 @@ However, inside of our `max` *function tempalate*, we assume quite a lot of thin
 > [!NOTE]
 > Even if you've implemented the `max` *function template* in stage 1 with `&` or `&&`, then it's not an assumption you took, but did you did not take that assumption *deliberately*?
 
-2. `T` can be used with the `<` operator.
+2. `T` can be used with the `<` operator with another instance of itself (of `T`), *and* the operator returns `bool`.
 
 This is a very dangerous assumption. If `T` has implemented the `<` operator with another instance of the same type, then we're good. It means that the developer thought that the user might want to compare two instances of the `T` type and implemented the scenario.
 
