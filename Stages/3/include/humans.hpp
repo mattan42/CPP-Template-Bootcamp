@@ -18,7 +18,7 @@ struct Child
     int age;
     void think()
     {
-        std::cout << "Adult is thinking..." << std::endl;
+        std::cout << "Child is thinking..." << std::endl;
     }
 };
 
@@ -27,7 +27,7 @@ struct Baby
     int age;
     void think()
     {
-        std::cout << "Adult is thinking..." << std::endl;
+        std::cout << "Baby is thinking..." << std::endl;
     }
 };
 
