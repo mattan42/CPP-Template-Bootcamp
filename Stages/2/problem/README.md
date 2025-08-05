@@ -47,6 +47,10 @@ So this is an even worst case - the compiler allows this weird behavior, but do 
     - What are the disadvantages of duck-typing?
     - How can we overcome duck-typing and enforce our type checks?
 2. Find a way to "block" our `max` function template from receiving `bool` as it's *type template parameter* (prevent the scenario from being able to compile, provide a nice *intentional* wraning)
+
+> [!WARNING]
+> Please refrain from using "concepts" while solving this stage (and other c++20 and later features). Use only c++17 (and below) features.
+
 3. We can do better - Find a way to limit the types our `max` function template receives to only integral types.
 
 <spoiler>
