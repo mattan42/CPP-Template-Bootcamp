@@ -2,8 +2,10 @@
 
 ## What did we Learn?
 
-- What is template specialization, how can it help us.
-- Explicit (full) Template Specialization.
-- Partial Template Specialization.
-- What is the Primary Template.
-- Syntax of primary template and specializations.
+- Template Specialization
+    - Explicit (full) Template Specialization
+    - Partial Template Specialization
+    - What is the Primary Template
+    - Syntax of primary template and specializations
+- Creating our own type traits using full and partial specializations
+- Using *variable templates* (`template<...> constexpr bool is_human_v = ...`, in this stage)

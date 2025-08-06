@@ -29,4 +29,7 @@ struct is_human<Baby> : public std::true_type
 {
 };
 
+template<typename Human>
+constexpr bool is_human_v = is_human<Human>::value;
+
 #endif
