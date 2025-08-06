@@ -1,4 +1,4 @@
-# Stage 1 Solution
+# Stage 1 - Solution
 
 ## The `max` *function template*
 
@@ -48,7 +48,7 @@ For us to use an *integral type constant tempalte parameter*, the value has to b
 
 ## Extra Questions
 
-1. Why is it called *function template* and not "template function"? How does it explain the behavior of the compiler?
+### Why is it called *function template* and not "template function"? How does it explain the behavior of the compiler?
 
 The correct term (which you see around documentation sites like "cppreference"), is *function template* and *class template*, because it's not a class in itself.
 
@@ -67,7 +67,7 @@ In other words, only when we actually try to use the *class template* / *functio
 
 This is called **implicit instantiation**, since we don't explicitly instantiate the class / function ourself but rather just using it, causing the compiler to instantiate it implicitly.
 
-## What We've Learned
+## What have we Learned
 
 - Declaring and using **function templates**
 - Declaring and using **class tempaltes**

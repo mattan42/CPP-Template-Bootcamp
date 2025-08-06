@@ -1,6 +1,6 @@
 # Solution
 
-## What did we Learn?
+## What have we Learned?
 
 - Template Specialization
     - Explicit (full) Template Specialization
