@@ -45,12 +45,12 @@ TEST(is_human_v, aliens)
 
 TEST(is_buffer, buffers)
 {
-    EXPECT_TRUE(is_buffer<Buffer<int, 1>>::value);
+    EXPECT_TRUE((is_buffer<Buffer<int, 1>>::value));
     static_assert(is_buffer<Buffer<int, 1>>::value, "A type Buffer<int, 1> should be considered a buffer");
 }
 
 TEST(is_buffer, not_buffers)
 {
-    EXPECT_TRUE(is_buffer<Alient>::value);
-    static_assert(is_buffer<Alien>::value, "A type Alient should not be considered a buffer");
+    EXPECT_FALSE(is_buffer<Alien>::value);
+    static_assert(!is_buffer<Alien>::value, "A type Alien should not be considered a buffer");
 }

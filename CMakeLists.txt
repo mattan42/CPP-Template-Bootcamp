@@ -19,3 +19,4 @@ FetchContent_MakeAvailable(googletest)
 
 add_subdirectory(Stages/1)
 add_subdirectory(Stages/2)
+add_subdirectory(Stages/3)

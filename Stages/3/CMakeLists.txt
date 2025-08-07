@@ -1,5 +1,7 @@
 project(stage_3)
 
+include_directories(./include)
+
 add_executable(stage_3 ./main.cpp)
 target_include_directories(stage_3 PRIVATE ./problem)
 target_link_libraries(stage_3 GTest::gtest_main)
