@@ -14,6 +14,9 @@ This is what we'll do in this stage!
 4. Remember our `Buffer` *class template* from the first stage? Create a `is_buffer` type trait that checks if a given type is a `Buffer`... type??? (is `Buffer` even a type? how can we check if something is created from the `Buffer` *class template*?)
     - Read about [*partial template specializations*](https://en.cppreference.com/w/cpp/language/partial_specialization.html), it might help you!
 
-> [!NOTE]
-> In this stage (same as the previous), you are **not** allowed to use c++20 features (concepts, constraints, `requires`).
-> As a general broader note, there are many ways to solve the same problem, in c++ and maybe in life in general. In this bootcamp, try to solve the problem using the reading material, as the stages are meant to teach you specific knowledge in a specific order.
+## Limitations
+
+- Do not modify the `main.cpp`.
+- Do not modify any of the files under `include`.
+- Do not use c++20 features - concepts, contraints, `requires`, etc...
+- Do not use c++17's `if constexpr` feature.
