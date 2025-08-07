@@ -10,6 +10,7 @@ This is what we'll do in this stage!
 
 1. Read about [*explicit (full) template specialization*](https://en.cppreference.com/w/cpp/language/template_specialization.html).
 2. Create a `is_human` type trait that accepts a *type template parameter* and checks if the received *type template parameter* is an `Adult` or `Child` or `Baby` or not.
+3. Create a `is_human_v` version of the `is_human` implementation.
 4. Remember our `Buffer` *class template* from the first stage? Create a `is_buffer` type trait that checks if a given type is a `Buffer`... type??? (is `Buffer` even a type? how can we check if something is created from the `Buffer` *class template*?)
     - Read about [*partial template specializations*](https://en.cppreference.com/w/cpp/language/partial_specialization.html), it might help you!
 
