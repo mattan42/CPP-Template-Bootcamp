@@ -7,7 +7,7 @@
 #include <type_traits>
 
 // Primary Template
-template<typename Human>
+template<typename>
 struct is_human : public std::false_type
 {
 };
