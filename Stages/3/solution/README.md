@@ -1,6 +1,6 @@
 # Solution
 
-## Explicit Specialization
+## Explicit Specialization and `is_human`
 
 According to "cppreference":
 > Allows customizing the template code for a given set of template arguments.
@@ -70,6 +70,28 @@ This is exactly equivelant to giving it a name, but it helps us convey the inten
 
 > [!NOTE]
 > In general, this feature of not having to name parameters is not limited just to templates. The standard doesn't force us to name parameters in function too, for example.
+
+
+## `is_human_v`
+
+This is a syntax sugar allowed using c++14's *variable template* feature. We can have `constexpr` variable values to be decided using *template parameters*.
+
+> [!NOTE]
+> The `_v` stands for `value`. This is a standard naming scheme, and especially in template code, in which it can get very complicated to understand if we're talking about a value or a type, it is recommended to adopt this standard.
+
+```c++
+template<typename Human>
+constexpr bool is_human_v = is_human<Human>::value;
+```
+
+> [!NOTE]
+> while The *template parameter name* `T` that's being used commonly in template code can be used here, it's better to use a more indicative name if appropriate.
+
+So in this case, we would just have `is_human_v` to be a *variable template* that accepts a `typename Human`, feed it our `is_human` type trait, and extract the `bool` value using `::value` on the `is_human` type trait.
+
+> [!NOTE]
+> You may also have encountered the `_t` naming convention. This stands for `typename`, and it helps us understanding that the name we're looking at is a type, not a value.
+
 
 ## What have we Learned?
 
