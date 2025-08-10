@@ -15,6 +15,10 @@ This is what we'll do in this stage!
 ## Limitations
 
 - Do not modify the `main.cpp`.
+
+> [!NOTE]
+> You can comment tests in order to solve the stage step-by-step.
+
 - Do not modify any of the files under `include`.
 - Do not use c++20 features - concepts, contraints, `requires`, etc...
 - Do not use c++17's `if constexpr` feature.

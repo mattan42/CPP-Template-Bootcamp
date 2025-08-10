@@ -54,5 +54,9 @@ So this is an even worst case - the compiler allows this weird behavior, but do 
 ## Limitations
 
 - Do not modify the `main.cpp`.
+
+> [!NOTE]
+> You can comment tests in order to solve the stage step-by-step.
+
 - Do not use c++20 features - concepts, contraints, `requires`, etc...
 - Do not use c++17's `if constexpr` feature.
