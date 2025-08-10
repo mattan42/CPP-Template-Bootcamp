@@ -4,11 +4,17 @@
 #include <type_traits>
 #include <utility>
 
+/**
+ * This is a very simple alien, just a struct with an int member.
+ */
 struct SimpleAlien
 {
     int age;
 };
 
+/**
+ * This is a normal alien.
+ */
 class Alien
 {
 public:
@@ -20,22 +26,32 @@ public:
     int age;
 };
 
+/**
+ * This is a vampire alien! It doesn't have an age at all!
+ */
 struct VampireAlien
 {};
 
+/**
+ * This alien has an age in `char`.
+ * This is weird, so he is WeirdAlien.
+ */
 struct WeirdAlien
 {
-    // Age in `char`?!?! That's weird.
     char age;
 };
 
-class AnotherAlien
+/**
+ * This alien is immortal, so we'd rather the user
+ * not being able to change it's age.
+ */
+class ImmortalAlien
 {
 public:
     // We don't want to have an alient without an initial age.
-    AnotherAlien() = delete;
+    ImmortalAlien() = delete;
 
-    AnotherAlien(int age) : inner_age(age)
+    ImmortalAlien(int age) : inner_age(age)
     {}
 
     int age()
