@@ -1,4 +1,4 @@
-# Solution
+# Stage 3 - Solution
 
 ## Explicit Specialization and `is_human`
 
