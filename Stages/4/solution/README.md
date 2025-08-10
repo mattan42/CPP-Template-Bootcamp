@@ -1,5 +1,6 @@
+# Stage 4 - Solution
 
-## `is_buffer` and Partial Specializations
+## Partial Specializations
 
 In this task we're asked to identify a type, but is it really a type...?
 
@@ -135,5 +136,58 @@ Neither specialiation #2 or specialziation #4 is more specialized than the other
 
 Notice, however, that if we had a `template<class X, class T, int I> class A<X*, T*, I>` specialization our program would be able to compile. Since this specialization is more specialized case than both #2 and #4, the compiler would just choose it for `a5`.
 
-### Implementing `is_buffer`
+### Implementing `is_buffer` Using Partial Specializations
 
+The primary template is pretty easy, since it's our default case.
+
+The *template parameter list* would contain one *type tempalte parameter* which is the type we do the check on, and would publicly inherit from `std::false_type`.
+
+```c++
+template<typename>
+struct is_buffer : public std::false_type {};
+```
+
+Now let's break down what are our "requriements" and what are our "free option", what things we "don't care" about the type we receive.
+
+The things we "don't care" about (accept all values) are the buffer's type and length. So our partial specialization's *tempalte parameter list* should contain a `typename` for the type of members of the buffer and an `int` *integral type constant template parameter* for the length of the buffer.
+
+We can already start writing the implementation:
+
+```c++
+template<typename Type, int Length>
+struct is_buffer
+```
+
+Now, as we've learend before, we have to comply with the primary tempalte *template parameter list*, which only contains one `typename`.
+
+Our requirements on the type is to be an instantiation of `Buffer`.
+
+So, we have a `typename` parameter `Type` and an integral type constant template parameter `Length`, and we want to create a specialized case for a type which is created from the `Buffer` *class template* using those `Type` and `Length`... `Buffer<Type, Length>`?
+
+And so, the implementation of the partial specialization case:
+
+```c++
+template<typename Type, int Length>
+struct is_buffer<Buffer<Type, Length>> : public std::true_type {};
+```
+
+Notice what's going on here when calling:
+
+```c++
+is_buffer<int>;
+is_buffer<Buffer<int, 1>>;
+```
+
+In the first case, the partial specialization does not fit. `int` is not a specialized case of `Buffer<Type, Length>`, so the primary tempalte will be chosen as the instantiation of `is_buffer<int>`.
+
+In the second case, `Buffer<int, 1>` *is* a specialized case of the partial specialization, with `Type=int, Length=1`.
+
+The compiler realizes this case is a more specialized case than the other cases (in this example, only the primary template) and chooses this specialization as the implementation of the `is_buffer<Buffer<int, 1>>` instantiation.
+
+
+## What have we Learned
+
+- Partial Tepmlate Specialization
+   - Syntax of Partial Specializations
+   - How does the compiler choose which implementation to use
+- Creating type traits that catch all the instantiations of a certain class template with Partial Template Specialization.
