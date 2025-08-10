@@ -15,12 +15,7 @@ def main_page_run():
 def stage_problem_page_run(stage_number: int):
     stage_directory_path = REPO_ROOT_PATH / "Stages" / str(stage_number)
 
-    left_column, right_column = st.columns(2)
-
-    left_column.markdown((stage_directory_path / "Problem" / "README.md").read_text())
-    with right_column.expander(label="Tests File", expanded=True):
-        st.code((stage_directory_path / "main.cpp").read_text(), language="cpp")
-
+    st.markdown((stage_directory_path / "Problem" / "README.md").read_text())
     st.divider()
 
     st.title("Try to Solve!")
@@ -28,13 +23,18 @@ def stage_problem_page_run(stage_number: int):
     solution_attempt_hpp_file = (
         stage_directory_path / "Problem" / "solution.hpp"
     ).read_text()
+    
+    left_column, right_column = st.columns(2)
 
-    submitted_code = st_ace(
-        value=solution_attempt_hpp_file,
-        theme="twilight",
-        language="c_cpp",
-        key=f"stage_problem_page_run_{str(stage_number)}_code_editor",
-    )
+    with left_column:
+        submitted_code = st_ace(
+            value=solution_attempt_hpp_file,
+            theme="twilight",
+            language="c_cpp",
+            key=f"stage_problem_page_run_{str(stage_number)}_code_editor",
+        )
+    with right_column.expander(label="Tests File", expanded=False):
+        st.code((stage_directory_path / "main.cpp").read_text(), language="cpp")
 
     (stage_directory_path / "Problem" / "solution.hpp").write_text(submitted_code)
 
@@ -65,21 +65,26 @@ def stage_problem_page_run(stage_number: int):
                 "".join(console_output), line_numbers=True, language=None
             )
 
-def streamlit_problem_page(stage_number: int) -> st.Page:
+def create_streamlit_problem_page(stage_number: int, icon="🤔", title=None) -> st.Page:
+    if not title:
+        title = f"Stage {stage_number}"
+    else:
+        title = f"Stage {stage_number}: {title}"
+    
+
     return st.Page(
         lambda: stage_problem_page_run(stage_number),
         url_path=f"stage_{stage_number}_problem",
-        title=f"Stage {stage_number} Problem",
-        icon="🤔",
+        title=title,
+        icon=icon,
     )
 
-
-# Pages
-main_page = st.Page(main_page_run, title="Main Page", icon="ℹ️")
-stage_1_problem_page = streamlit_problem_page(stage_number=1)
-stage_2_problem_page = streamlit_problem_page(stage_number=2)
-
 # App
-pg = st.navigation([main_page, stage_1_problem_page, stage_2_problem_page])
+pg = st.navigation([st.Page(main_page_run, title="Main Page", icon="ℹ️"),
+                    create_streamlit_problem_page(stage_number=1),
+                    create_streamlit_problem_page(stage_number=2, icon="🦆", title="Ducks"),
+                    create_streamlit_problem_page(stage_number=3, icon="💯", title="Full Specializations"),
+                    create_streamlit_problem_page(stage_number=4, icon="🤏", title="Partial Specializations"),
+])
 st.set_page_config(page_title="C++ Template Bootcamp", page_icon="🧑‍💻", layout="wide")
 pg.run()
