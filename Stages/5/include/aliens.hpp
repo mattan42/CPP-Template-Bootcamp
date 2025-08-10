@@ -23,6 +23,12 @@ public:
 struct VampireAlien
 {};
 
+struct WeirdAlien
+{
+    // Age in `char`?!?! That's weird.
+    char age;
+};
+
 class AnotherAlien
 {
 public:
