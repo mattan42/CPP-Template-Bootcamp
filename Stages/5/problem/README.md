@@ -35,6 +35,14 @@ So what is SFINAE - Substitution Failure Is Not An Error?
 2. Create a `is_human_like` type trait that returns `true` if a type has a public member `int age`.
 3. Extend the `is_human_like` type trait to return `true` if a type has a public member `int age` **or** a public method `age` that returns `int`.
 
+> [!WARNING]
+> This might be the hardest stage yet. It requires knowing the nitty-gritty of the template compilation process and understanding how to use it to our advantage. 
+> 
+> Don't give up quickly! A huge part of writing template code in c++ is fighting with the compiler until something works.
+>
+> Good luck!
+
+
 ## Limitations
 
 - Do not modify the `main.cpp`.
