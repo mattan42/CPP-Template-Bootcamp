@@ -330,7 +330,19 @@ Let's also try `is_human_like<Alien>` to make sure we haven't broken anything in
 7. The specialization gets selected (since it's more special than the primary case, having `void` as the second *template argument*)
 8. The instantiation will have a `public static constexpr bool value = true`.
 
-### `WeirdAlien` and `VampireAlien`, 2 different substitution failures
+
+### The "weird" `typename` Before `std::enable_if`
+
+Sometimes the statements we have to write in template code gets really complicated, even for the compiler. In these situations, we might need to help the compiler understand with what it deals with.
+
+In this case, we help the compiler by telling it "this `::type` I'm accessing here is a `typename`, trust me.
+
+> [!NOTE]
+> Sometimes assisting the compiler is necessary, but sometimes not.
+> If the compiler fails on identifying if something is a type or not and you *know* it is, you can help it as illustrated above.
+
+
+## `WeirdAlien` and `VampireAlien`, 2 different substitution failures
 
 Let's go trying to use `is_human_like` with `WeirdAlien`:
 
@@ -340,3 +352,85 @@ Let's go trying to use `is_human_like` with `WeirdAlien`:
 4. `std::is_same` will be instantiated with the first template argument being `false`.
 5. `std::is_same` won't have a `using type` declaration inside of it's instantiation, and so trying to access one will result in a failure.
 6. SFINAE happens, and the compiler results ot the primary template.
+
+Notice that we used SFINAE the same way, but this time we had a different failure.
+
+This shows us that we can use SFINAE to check all sorts of things on a type. If we wanted, we could've omit the `std::is_same` type trait and just verify that the type has an `age` public member.
+
+
+## Extending `is_human_like_v` to Include a `int age()` Method
+
+### Checking if a Method Exists and it's Return Type
+
+This will be done in the same way we did in the previous steps - by just accessig (duck typing) an `int age()` method.
+
+Checking the return type is also quite easy - since `age` doesn't accept any arguments, we can just call it and `decltype` on the result:
+
+```c++
+decltype(std::declval<Human>().age())
+```
+
+Then, in the same way, we can place the yielded result inside a `std::is_same` type trait with `int` to verify the return type.
+
+
+### Trying the `||` operand
+
+The first thing that probably comes to mind when we want to add another check to our type-trait is to just add a `||` operator besides the `std::is_same` and check for an `int age()` method:
+
+
+```c++
+template<typename Human>
+struct is_human_like<
+    Human, 
+    typename std::enable_if<
+        std::is_same<decltype(std::declval<Human>().age), int>::value ||
+        std::is_same<decltype(std::declval<Human>().age()), int>::value
+    >::type
+> : public std::true_type
+{};
+```
+
+However, this will cause for all `is_human_like_v` instantiations to end up being the primary tempalte:
+
+```
+/mnt/c/Users/Mattan/Documents/coding/cpp_template_tutorial/Stages/5/main.cpp:10:19: error: static assertion failed: SimpleAlien has an age, it's human like
+   10 |     static_assert(is_human_like_v<SimpleAlien>, "SimpleAlien has an age, it's human like");
+```
+
+Even when the first half of the `||` operand already resolved to `true`, the compiler still tries resolving the latter - `std::is_same<decltype(std::declval<Human>().age()), int>`. However, when it reaches the `.age()` part, it fails, since `SimpleAlien` doesn't have a method `age`.
+
+The same thing will happen to every one of the aliens, since no one can have both public member `int age` and a public method with the same name and same signature (how would the compiler diffrentiate between them?)
+
+
+### Another Partial Specialization
+
+Since we're dealing yet with another "exists or not" failure, we can utilize SFIANE once again by creating another partial specialization:
+
+```c++
+template<typename Human>
+struct is_human_like<
+    Human, 
+    typename std::enable_if<
+                                 // Notice the () Here vvv !
+        std::is_same<decltype(std::declval<Human>().age()), int>::value
+    >::type
+> : public std::true_type
+{};
+```
+
+This way we're forcing the compiler to check both conditions, each time in it's own partial specialization, so a failure in not having a `int age()` public method won't affect the partial specialization that checks if a type has a `int age` public *member* (and the opposite).
+
+
+## What have we Learned?
+
+- The `decltype` specifier.
+- How to force a *partial specialization* using a "fake" *template parameter*.
+- `std::enable_if` and how it help us to use SFINAE.
+- SFINAE.
+    - What does "substitution failure is not an error" means.
+    - Where we can use it and where we cannot.
+    - How we can use it in combination with specializations and `std::enable_if`.
+- `declval`
+    - What is it.
+    - How can we use it to do things on methods and members.
+- How can we help the compiler using the `typename` keyword.
