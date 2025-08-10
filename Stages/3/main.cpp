@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
 #include "humans.hpp"
-#include "buffer.hpp"
 
 #include "solution.hpp"
 
@@ -41,16 +40,4 @@ TEST(is_human_v, aliens)
 {
     EXPECT_FALSE(is_human_v<Alien>);
     static_assert(!is_human_v<Alien>, "An Alien should not be a human");
-}
-
-TEST(is_buffer, buffers)
-{
-    EXPECT_TRUE((is_buffer<Buffer<int, 1>>::value));
-    static_assert(is_buffer<Buffer<int, 1>>::value, "A type Buffer<int, 1> should be considered a buffer");
-}
-
-TEST(is_buffer, not_buffers)
-{
-    EXPECT_FALSE(is_buffer<Alien>::value);
-    static_assert(!is_buffer<Alien>::value, "A type Alien should not be considered a buffer");
 }

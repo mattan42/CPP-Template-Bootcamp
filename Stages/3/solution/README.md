@@ -92,13 +92,10 @@ So in this case, we would just have `is_human_v` to be a *variable template* tha
 > [!NOTE]
 > You may also have encountered the `_t` naming convention. This stands for `typename`, and it helps us understanding that the name we're looking at is a type, not a value.
 
-
 ## What have we Learned?
 
-- Template Specialization
-    - Explicit (full) Template Specialization
-    - Partial Template Specialization
-    - What is the Primary Template
-    - Syntax of primary template and specializations
-- Creating our own type traits using full and partial specializations
+- Explicit (full) Template Specialization
+    - What is referred to by "Primary Template"
+    - Syntax of primary template and full specializations
+- Creating our own type traits using full specializations
 - Using *variable templates* (`template<...> constexpr bool is_human_v = ...`, in this stage)
