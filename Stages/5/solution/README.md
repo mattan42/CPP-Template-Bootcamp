@@ -117,6 +117,8 @@ Let's move on to the next type we need to apply our "is human like" type-trait o
 
 ## Checking on `VampireAlien`
 
+### Using Specializations for the Type Trait
+
 This doesn't work, and we kind of could've expected it - it doesn't have a `int age` member, and so trying to access an unexisting member (tyring out duck typing) will result in the error:
 
 ```
@@ -126,4 +128,215 @@ This doesn't work, and we kind of could've expected it - it doesn't have a `int 
 
 So we might have to use the "classical" type-trait technique we've used in the previous stages of having a default `false` implementation and other `true` specializations.
 
+However, how do we verify that something *doesn't* exist? The absience of something?
 
+As we've seen before, if we try accessing it, the compiler will result in a failure. But - "substitution failure is not an error", right?
+
+We can try to use `SFINAE`, which we talked about earlier, to discard the `true_type` specialization and make the compiler choose the primary template for types that accessing their `age` member will result in a faiulure.
+
+Let's try implementing the primary and specialization:
+
+```c++
+template<typename Human>
+struct is_human_like : public std::false_type
+{};
+
+template<typename Human>
+struct is_human_like<Human> : public std::true_type
+{};
+```
+
+Before we even implemented the static assert, we get the following compilation error:
+
+```
+./try.cpp:28:8: error: partial specialization ‘struct is_human_like<Human>’ does not specialize any template arguments; to define the primary template, remove the template argument list
+```
+
+The compiler rightfully says that the specialization doesn't really specialize anything, and even instructs us to remove the *template argument list* (the `<Human>` that comes right after `is_human_like`) to create the primary template - it's thinking we want to define the primary tempalte and not a specialization...
+
+
+### Forcing a Specialization
+
+The problem is that we don't have a real "specialization" from the beginning, nor we want one... We just want the compiler to first try our specialization, and if that fails, only then to choose our primary template.
+
+So how about we create a "fake" template parameter, one that we won't actually use, just to force the compiler to choose the specialization first?
+
+```c++
+template<typename Human, typename Dummy>
+struct is_human_like : public std::false_type
+{};
+
+template<typename Human>
+struct is_human_like<Human, void> : public std::true_type
+{};
+```
+
+This way, when the user will use `is_human_like<VampireAlien>`, the specialiation will be automatically chosen, since it uses only one tepmlate argument (and gets the second type template argument from the specialization *template argument list*), right?
+
+This sadly results in the following error:
+
+```
+./try.cpp:34:31: error: wrong number of template arguments (1, should be 2)
+   34 |     static_assert(is_human_like<VampireAlien>::value, "");
+```
+
+This is also very true - the `is_human_like` accpets **two** *template arguments*, as dictated by the primary template.
+
+Even if our specialization only needs one *template parameter*, when trying to instantiate the *class template*, 2 *template arguments* are requried.
+
+In the case above, our specializtion would be chosen only if we call `is_human_like<VampireAlien, void>`, since this is the "specialized case".
+
+However, we don't want to force the user to call `is_human_like<VampireAlient, void>`. Forcing such an API makes sense only if you know template metaprogramming. Also, it opens a huge place for errors - if the user will call `is_human_like` with anything other than `void`, the specialization would not be chosen by the compiler, which will choose the primary immediately.
+
+Can we somehow automatically "insert" the `void` type as an argument when instantiating the *class template*? The same way we can automatically insert arguments without forcing the user to specify them - using *defaults arguments*, but for *template parameters*:
+
+```c++
+template<typename Human, typename Dummy = void>
+struct is_human_like : public std::false_type
+{};
+
+template<typename Human>
+struct is_human_like<Human, void> : public std::true_type
+{};
+```
+
+This way, when calling `is_human_like<VampireAlien>`, the second `typename` parameter gets automatically substituted with the default argument `void`. Since the arguments to the template become `VampireAlien, void`, our specialization is more special than the primary template and thus gets chosen by the compiler.
+
+> [!NOTE]
+> This is still a bit error prone - if the user deliberately calls `is_human_like` with a second type not being `void`, the primary template will be automatically chosen.
+>
+> This case is still preferrable since the end-user API makes more sense and so hopefully will help preventing usage errors.
+
+### Causing a Substitution Failure
+
+Now that we've successfully forced the compiler to choose our specialization, we can fail it if there's no `int age` public member like we have in our previous implementation.
+
+This time, however, we're using SFINAE and have the primary template to catch the failure before the whole compilation fails.
+
+```c++
+template<typename Human, typename Dummy = void>
+struct is_human_like : public std::false_type
+{};
+
+template<typename Human>
+struct is_human_like<Human, void> : public std::true_type
+{
+    static_assert(std::is_same_v<decltype(std::declval<Human>().age), int>, "");
+};
+```
+
+Despite thinking that in case of a failure we would reach the primary tempalte, it seems like the compiler fails on the specialization, resulting in the following error:
+
+```
+./try.cpp:28:65: error: ‘struct VampireAlien’ has no member named ‘age’
+   28 |     static_assert(std::is_same_v<decltype(std::declval<Human>().age), int>, "");
+```
+
+Why does "SFINAE" doesn't work here? Isn't *substitution failure* is not an error?
+
+The answer is a part o the question - this is *not* a *substitution failure*.
+
+Reaching the *implementation* of our partial specialization means the compiler has *already chosen* our partial implementation as the implementaion of `is_human_like`.
+
+The compiler already successfully performed the substitution successfully.
+
+SFINAE is Substitution Failure is not an Error, *not* Instantiation Failure is not an Error.
+
+In order to use SFINAE to our advantage we have to cause a *substitution failure*.
+
+Substitution is when arguments are put in place of parameters. We can cause substitution failures in the places in which arguments become parameters:
+
+```c++
+template <...>
+struct my_struct</* template argument list: substitution failures here are not errors */> {
+    // "Substitution failures" here are errors.
+};
+```
+
+> [!NOTE]
+> As a side note, these are the places we can cause substitution failures in *function tempalte*s:
+> ```c++
+> template<...>
+> my_function</* template argument list: substitution failures here are not errors */>( /* function arguments: substitution failures here are not errors */) {
+>     // "substitution failures" here are errors
+> }
+> ```
+>
+> Notice we have 2 places we can utilize substitution failures.
+
+To conclude - we have to somehow check if our *type tepmalte parameter* has a public member `int age` in the substitution process in order to use SFINAE.
+
+
+### `std::enable_if` to Cause Substitution Failure
+
+From [cppreference on `std::enable_if`](https://en.cppreference.com/w/cpp/types/enable_if.html#:~:text=If%20B%20is,no%20member%20typedef.):
+
+> ```c++
+> template< bool B, class T = void >
+> struct enable_if;
+> ```
+> If B is true, std::enable_if has a public member typedef type, equal to T; otherwise, there is no member typedef.
+
+In other words, if the bool value of B (which is a bool type *constant template parameter*, so it has to be known at compile time) is `true`, the type `T` (which defaults to `void`) would be "returned". Otherwise, no type would be "returned".
+
+Trying to access a `std::enable_if<...>::type` that doesn't exist would result in a failure, the same way we experienced in the beginning, when we've tried accessing the (unexisting) `age` public member of `VampireAlien` and caused a failure.
+
+
+### Putting it all Together
+
+We're under the following restrictions:
+1. The failure has to be in the *template argument list* of our specialization.
+2. A failure should happen in the case the given type doesn't have a public member `int age`.
+
+And we have the following "abilities":
+1. Return `true` if a type has a public member `int age` and *fail* (*not* return false) if it doesn't.
+2. Return `void` if a certain condition results in `true`. Fail if the condition results in `false`.
+
+Combining them results in:
+
+```c++
+template<typename Human>
+struct is_human_like<
+    Human, 
+    typename std::enable_if<
+        std::is_same<decltype(std::declval<Human>().age), int>::value
+    >::type
+> : public std::true_type
+{};
+```
+
+Let's break it down:
+
+1. The user calls `is_human_like<VampireAlien>`. This calls tries instantiating `is_human_like` with `Human = VampireAlien`.
+2. Since the primary template is `template<typename, typename=void>`, the *template argument list* is `VampireAlien, void`.
+3. The compiler tries substituting the partial specialization to see if it's more specialized than the primary template.
+4. During substitution a failure occurs - `VampireAlien` doesn't have a public member `age`.
+5. Because this is a part of the substitution, SFINAE is valid in this case, and so the compiler just goes to the next option it has, the primary template.
+6. It tries instantiating the primary template successfully, and so the primary template's implementation is beind used for the instantiation of `is_human_like<VampireAlien>`.
+
+
+Let's also try `is_human_like<Alien>` to make sure we haven't broken anything in the way:
+
+1. The user calls `is_human_like<Alien>`. This calls tries instantiating `is_human_like` with `Human = Alien`.
+2. Since the primary template is `template<typename, typename=void>`, the *template argument list* is `Alien, void`.
+3. The compiler tries substituting the partial specialization to see if it's more specialized than the primary template.
+
+> [!NOTE]
+> Notice that the first 3 steps are completelly the same.
+
+4. `decltype(std::declval<Human>().age)` yields `int`
+5. The `std::is_same` returns `true`.
+6. `enable_if` received `true` as the first *template argument*, so the instantiation's implementation will have a `using type = void`.
+7. The specialization gets selected (since it's more special than the primary case, having `void` as the second *template argument*)
+8. The instantiation will have a `public static constexpr bool value = true`.
+
+### `WeirdAlien` and `VampireAlien`, 2 different substitution failures
+
+Let's go trying to use `is_human_like` with `WeirdAlien`:
+
+1. The first 3 steps are the same as the previous cases, so let's skip to the substitution.
+2. This time `decltype` doesn't result in a failure but yields a type `char`.
+3. `std::is_same` will have `value = false`, because `char` is not the same as `int`.
+4. `std::is_same` will be instantiated with the first template argument being `false`.
+5. `std::is_same` won't have a `using type` declaration inside of it's instantiation, and so trying to access one will result in a failure.
+6. SFINAE happens, and the compiler results ot the primary template.
