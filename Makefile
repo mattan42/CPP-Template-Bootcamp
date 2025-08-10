@@ -30,3 +30,13 @@ stage_3:
 stage_3_solution:
 	cmake -B $(BUILD_DIRECTORY) .
 	make -C $(BUILD_DIRECTORY) stage_3_solution
+
+.PHONY: stage_4
+stage_4:
+	cmake -B $(BUILD_DIRECTORY) .
+	make -C $(BUILD_DIRECTORY) stage_4
+
+.PHONY: stage_4_solution
+stage_4_solution:
+	cmake -B $(BUILD_DIRECTORY) .
+	make -C $(BUILD_DIRECTORY) stage_4_solution
