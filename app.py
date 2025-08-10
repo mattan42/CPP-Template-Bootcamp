@@ -65,7 +65,7 @@ def stage_problem_page_run(stage_number: int):
                 "".join(console_output), line_numbers=True, language=None
             )
 
-def create_streamlit_problem_page(stage_number: int, icon="🤔", title=None) -> st.Page:
+def create_problem_page(stage_number: int, icon="🤔", title=None) -> st.Page:
     if not title:
         title = f"Stage {stage_number}"
     else:
@@ -81,10 +81,10 @@ def create_streamlit_problem_page(stage_number: int, icon="🤔", title=None) ->
 
 # App
 pg = st.navigation([st.Page(main_page_run, title="Main Page", icon="ℹ️"),
-                    create_streamlit_problem_page(stage_number=1),
-                    create_streamlit_problem_page(stage_number=2, icon="🦆", title="Ducks"),
-                    create_streamlit_problem_page(stage_number=3, icon="💯", title="Full Specializations"),
-                    create_streamlit_problem_page(stage_number=4, icon="🤏", title="Partial Specializations"),
+                    create_problem_page(stage_number=1),
+                    create_problem_page(stage_number=2, icon="🦆", title="Ducks"),
+                    create_problem_page(stage_number=3, icon="💯", title="Full Specializations"),
+                    create_problem_page(stage_number=4, icon="🤏", title="Partial Specializations"),
 ])
 st.set_page_config(page_title="C++ Template Bootcamp", page_icon="🧑‍💻", layout="wide")
 pg.run()
