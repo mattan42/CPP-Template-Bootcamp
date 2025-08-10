@@ -29,11 +29,12 @@ So what is SFINAE - Substitution Failure Is Not An Error?
 ## Objective
 
 1. Read about
+    - The [`decltype` Specifier](https://en.cppreference.com/w/cpp/language/decltype.html)
     - [SFINAE](https://en.cppreference.com/w/cpp/language/sfinae.html)
     - [`std::enable_if`](https://en.cppreference.com/w/cpp/types/enable_if.html)
     - [`declval`](https://en.cppreference.com/w/cpp/utility/declval.html)
-2. Create a `is_human_like` type trait that returns `true` if a type has a public member `int age`.
-3. Extend the `is_human_like` type trait to return `true` if a type has a public member `int age` **or** a public method `age` that returns `int`.
+2. Create a `is_human_like_v` type trait that results to `true` if a type has a public member `int age`.
+3. Extend the `is_human_like_v` type trait to results to `true` if a type has a public member `int age` **or** a public method `age` that returns `int`.
 
 > [!WARNING]
 > This might be the hardest stage yet. It requires knowing the nitty-gritty of the template compilation process and understanding how to use it to our advantage. 

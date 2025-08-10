@@ -4,6 +4,11 @@
 #include <type_traits>
 #include <utility>
 
+struct SimpleAlien
+{
+    int age;
+};
+
 class Alien
 {
 public:
